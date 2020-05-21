@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <img src="{{ url_for('static', filename='img/logo-white-512.png') }}" width="32" height="32" alt="">
+        </a>
+        <a class="navbar-brand" href="{{ url_for('public.index') }}">
+          <span class="font-effect-wallpaper ml-3" style="font-weight:900;">Laughing Barnacle</span>
+        </a>
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" area-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarCollapse" class="navbar-collapse collapse justify-content-between">
+          <ul class="navbar-nav">
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == url_for('public.profile', id=current_user.id) %}active{% endif %}" href="{{url_for('public.profile', id=current_user.id)}}">Профиль</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == url_for('public.friends') %}active{% endif %}" href="{{url_for('public.friends')}}">Друзья</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == url_for('public.chats') %}active{% endif %}" href="{{ url_for('public.chats') }}">Чаты</a>
+            </li>
+            {% endif %}
+          </ul>
+          <ul class="navbar-nav">
+            {% if current_user.is_authenticated and current_user.profile %}
+              <li class="nav-item">
+                <a class="nav-link">
+                  Привет, {{current_user.profile.name}}
+                </a>
+              </li>
+            {% endif %}
+            {% if current_user.has_role('admin') or current_user.has_role('staff') %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin.index') }}">Админка</a>
+              </li>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('security.logout') }}">Выход</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('security.login') }}">Вход</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+{% endblock %}
+
+{% block msg %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-6">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

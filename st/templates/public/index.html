@@ -1,0 +1,30 @@
+{% extends 'master.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <h3 class="text-center col-8 mx-auto">Добро пожаловать в приложение онлайн-чат <b>Laughing Barnacle</b></h3>
+    </div>
+    <div class="row justify-content-center">
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/python">
+    from browser import document, alert
+
+    def helo(ev):
+        alert('EHLO MAZAFAKA')
+
+    document['hello'].bind('click', helo)
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function(){
+      var socket = io.connect('/');
+      socket.on('connect', function(){
+        console.log('Socket.IO Connected');
+      });
+    });
+  </script>
+{% endblock %}
